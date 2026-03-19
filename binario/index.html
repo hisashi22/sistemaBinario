@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binário 10 bits</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 800px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .bits, .potencias {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .bit, .pot {
+      padding: 12px;
+      border-radius: 8px;
+      background: #1e293b;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .ativo {
+      background: #22c55e;
+      color: black;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 20px;
+      font-size: 1rem;
+    }
+
+    .info {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #cbd5f5;
+    }
+
+    @media (max-width: 600px) {
+      .bit, .pot {
+        padding: 8px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Decimal → Binário (10 bits)</h1>
+
+    <!-- Bits -->
+    <div class="bits" id="bits"></div>
+
+    <!-- Potências -->
+    <div class="potencias" id="pots"></div>
+
+    <!-- Input -->
+    <input type="number" id="decimal" placeholder="Digite um número (0 até 1023)">
+
+    <div class="info">Máximo: 1023 (10 bits)</div>
+  </div>
+
+  <script>
+    const bitsContainer = document.getElementById("bits");
+    const potsContainer = document.getElementById("pots");
+    const input = document.getElementById("decimal");
+
+    const tamanho = 10;
+
+    // cria estrutura fixa
+    for (let i = tamanho - 1; i >= 0; i--) {
+      const bit = document.createElement("div");
+      bit.classList.add("bit");
+      bit.innerText = "0";
+      bitsContainer.appendChild(bit);
+
+      const pot = document.createElement("div");
+      pot.classList.add("pot");
+      pot.innerText = Math.pow(2, i);
+      potsContainer.appendChild(pot);
+    }
+
+    const atualizar = () => {
+      let valor = parseInt(input.value) || 0;
+      const bits = document.querySelectorAll(".bit");
+
+      // limitar até 1023
+      if (valor > 1023) {
+        valor = 1023;
+        input.value = 1023;
+      }
+
+      for (let i = 0; i < tamanho; i++) {
+        let pot = Math.pow(2, tamanho - 1 - i);
+
+        if (valor >= pot) {
+          bits[i].innerText = "1";
+          bits[i].classList.add("ativo");
+          valor -= pot;
+        } else {
+          bits[i].innerText = "0";
+          bits[i].classList.remove("ativo");
+        }
+      }
+    };
+
+    input.addEventListener("input", atualizar);
+  </script>
+
+</body>
+</html>
